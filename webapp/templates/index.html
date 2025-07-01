@@ -3,341 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume — Component Datasheet</title>
+    <title>{{ resume.personal.name if resume.personal and resume.personal.name else 'Resume' }} — Technical Profile</title>
     <link rel="stylesheet" href="/static/terminal.css">
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 <body>
-    <!-- Theme Toggle -->
-    <button class="theme-toggle" onclick="toggleTheme()">◐ THEME</button>
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button class="theme-toggle" onclick="toggleTheme()">◐ THEME</button>
+        <div class="control-buttons">
+            <button class="control-btn" hx-get="/state" hx-target="#state-data" hx-swap="innerHTML">↻ RELOAD</button>
+            <button class="control-btn" onclick="window.print()">⎙ PRINT</button>
+            <button class="control-btn" onclick="window.location.href='/state'">⚡ API</button>
+        </div>
+    </div>
     
-    <div class="grid-container">
-        <!-- Main Component - Personal Info -->
-        <div class="component">
-            <header class="component-header">
-                <h1 class="component-title">{{ resume.personal.name if resume.personal and resume.personal.name else 'Personal Component' }}</h1>
-                <span class="component-ref">REF: PERS-001</span>
-            </header>
-            
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
             {% if resume.personal %}
-            <table class="spec-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Value</th>
-                        <th>Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for key, value in resume.personal.items() %}
-                    <tr>
-                        <td class="param">{{ key|replace('_', ' ')|title }}</td>
-                        <td class="value">{{ value }}</td>
-                        <td class="units">{{ 'Contact' if key in ['email', 'phone', 'website'] else 'Info' }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="hero-card">
+                <div class="hero-header">
+                    <h1 class="hero-name">{{ resume.personal.name }}</h1>
+                    <div class="hero-title">{{ resume.personal.title }}</div>
+                    <div class="hero-location">📍 {{ resume.personal.location }}</div>
+                </div>
+                
+                <div class="contact-grid">
+                    {% if resume.personal.email %}
+                    <a href="mailto:{{ resume.personal.email }}" class="contact-item">
+                        <span class="contact-icon">✉</span>
+                        <span class="contact-value">{{ resume.personal.email }}</span>
+                    </a>
+                    {% endif %}
+                    {% if resume.personal.phone %}
+                    <a href="tel:{{ resume.personal.phone }}" class="contact-item">
+                        <span class="contact-icon">☏</span>
+                        <span class="contact-value">{{ resume.personal.phone }}</span>
+                    </a>
+                    {% endif %}
+                    {% if resume.personal.github %}
+                    <a href="https://{{ resume.personal.github }}" class="contact-item" target="_blank">
+                        <span class="contact-icon">⚡</span>
+                        <span class="contact-value">{{ resume.personal.github }}</span>
+                    </a>
+                    {% endif %}
+                    {% if resume.personal.linkedin %}
+                    <a href="https://{{ resume.personal.linkedin }}" class="contact-item" target="_blank">
+                        <span class="contact-icon">🔗</span>
+                        <span class="contact-value">{{ resume.personal.linkedin }}</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
             {% endif %}
-        </div>
-        
-        <!-- Summary Component -->
-        {% if resume.summary %}
-        <div class="component">
-            <header class="component-header">
-                <h2 class="component-title">System Overview</h2>
-                <span class="component-ref">REF: SUM-001</span>
-            </header>
             
-            <div class="state-monitor">
-                <div class="state-monitor-header">Professional Summary</div>
-                <div class="state-grid">
-                    <span class="state-label">Description</span>
-                    <span class="state-value">{{ resume.summary.text }}</span>
+            <!-- Summary -->
+            {% if resume.summary %}
+            <div class="summary-card">
+                <header class="card-header">
+                    <h2 class="card-title">🎯 EXECUTIVE SUMMARY</h2>
+                    <span class="card-ref">REF: SUM-001</span>
+                </header>
+                <div class="summary-content">
+                    {{ resume.summary.text }}
                 </div>
             </div>
-        </div>
-        {% endif %}
+            {% endif %}
+        </section>
         
-        <!-- Achievements Component -->
-        {% if resume.achievements %}
-        <div class="component">
-            <header class="component-header">
-                <h2 class="component-title">Achievement Logs</h2>
-                <span class="component-ref">REF: ACH-001</span>
-            </header>
-            
-            <div class="state-monitor">
-                <div class="state-monitor-header">Key Accomplishments</div>
-                {% if resume.achievements['items'] %}
-                <div class="pin-list">
-                    {% for achievement in resume.achievements['items'] %}
-                    <div class="pin-number">{{ loop.index }}</div>
-                    <div class="pin-name">{{ achievement }}</div>
-                    <div class="pin-type">ACH</div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
-        </div>
-        {% endif %}
-        
-        <!-- Languages Component -->
-        {% if resume.languages %}
-        <div class="component">
-            <header class="component-header">
-                <h2 class="component-title">Language Support</h2>
-                <span class="component-ref">REF: LANG-001</span>
-            </header>
-            
-            <table class="spec-table">
-                <thead>
-                    <tr>
-                        <th>Language</th>
-                        <th>Proficiency</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for lang_item in resume.languages['items'] %}
-                    <tr>
-                        <td class="param">{{ lang_item.language }}</td>
-                        <td class="value">{{ lang_item.proficiency }}</td>
-                        <td class="units">Active</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
-        
-        <!-- Experience Components -->
-        {% if resume.experience %}
-        <div class="component">
-            <header class="component-header">
-                <h2 class="component-title">Experience Matrix</h2>
-                <span class="component-ref">REF: EXP-001</span>
-            </header>
-            
-            {% for position in resume.experience %}
-            <div class="state-monitor">
-                <div class="state-monitor-header">{{ position.title }} @ {{ position.company }}</div>
-                <div class="state-grid">
-                    <span class="state-label">Duration</span>
-                    <span class="state-value">{{ position.dates }}</span>
-                    {% if position.location %}
-                    <span class="state-label">Location</span>
-                    <span class="state-value">{{ position.location }}</span>
-                    {% endif %}
-                    {% if position.description %}
-                    <span class="state-label">Description</span>
-                    <span class="state-value">{{ position.description }}</span>
-                    {% endif %}
-                </div>
-                {% if position.highlights %}
-                <div class="pin-list">
-                    {% for highlight in position.highlights %}
-                    <div class="pin-number">{{ loop.index }}</div>
-                    <div class="pin-name">{{ highlight }}</div>
-                    <div class="pin-type">RESP</div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        
-        <!-- Skills Component -->
-        {% if resume.skills %}
-        <div class="component">
-            <header class="component-header">
-                <h2 class="component-title">Technical Specifications</h2>
-                <span class="component-ref">REF: TECH-001</span>
-            </header>
-            
-            <table class="spec-table">
-                <thead>
-                    <tr>
-                        <th>Skill Category</th>
-                        <th>Technologies</th>
-                        <th>Level</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for skill_group in resume.skills %}
-                        {% for skill_item in skill_group['items'] %}
-                        <tr>
-                            <td class="param">{{ skill_group.category }}</td>
-                            <td class="value">{{ skill_item }}</td>
-                            <td class="units">Expert</td>
-                        </tr>
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Primary Column -->
+            <div class="primary-column">
+                <!-- Experience -->
+                {% if resume.experience %}
+                <div class="section-card experience-section">
+                    <header class="card-header">
+                        <h2 class="card-title">💼 PROFESSIONAL EXPERIENCE</h2>
+                        <span class="card-ref">REF: EXP-001</span>
+                    </header>
+                    
+                    <div class="experience-timeline">
+                        {% for position in resume.experience %}
+                        <div class="experience-item">
+                            <div class="experience-header">
+                                <div class="position-info">
+                                    <h3 class="position-title">{{ position.title }}</h3>
+                                    <div class="company-name">{{ position.company }}</div>
+                                </div>
+                                <div class="position-meta">
+                                    <div class="position-dates">{{ position.dates }}</div>
+                                    {% if position.location %}
+                                    <div class="position-location">{{ position.location }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            {% if position.description %}
+                            <div class="position-description">{{ position.description }}</div>
+                            {% endif %}
+                            
+                            {% if position.highlights %}
+                            <div class="achievements-list">
+                                {% for highlight in position.highlights %}
+                                <div class="achievement-item">
+                                    <span class="achievement-bullet">▸</span>
+                                    <span class="achievement-text">{{ highlight }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
                         {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
-        
-        <!-- Learning Component -->
-        {% if resume.learning %}
-        <div class="component">
-            <header class="component-header">
-                <h2 class="component-title">Learning & Development</h2>
-                <span class="component-ref">REF: LEARN-001</span>
-            </header>
-            
-            <div class="state-monitor">
-                <div class="state-monitor-header">Current Focus Areas</div>
-                {% if resume.learning.focus_areas %}
-                <div class="pin-list">
-                    {% for focus in resume.learning.focus_areas %}
-                    <div class="pin-number">{{ loop.index }}</div>
-                    <div class="pin-name">{{ focus }}</div>
-                    <div class="pin-type">FOCUS</div>
-                    {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Projects -->
+                {% if resume.projects %}
+                <div class="section-card projects-section">
+                    <header class="card-header">
+                        <h2 class="card-title">🚀 KEY PROJECTS</h2>
+                        <span class="card-ref">REF: PROJ-001</span>
+                    </header>
+                    
+                    <div class="projects-grid">
+                        {% for project in resume.projects %}
+                        <div class="project-item">
+                            <div class="project-header">
+                                <h3 class="project-name">{{ project.name }}</h3>
+                                {% if project.technologies %}
+                                <div class="project-tech">{{ project.technologies }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            {% if project.highlights %}
+                            <div class="project-highlights">
+                                {% for highlight in project.highlights %}
+                                <div class="project-highlight">
+                                    <span class="highlight-bullet">→</span>
+                                    <span class="highlight-text">{{ highlight }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
             </div>
             
-            <div class="state-monitor">
-                <div class="state-monitor-header">Continuous Learning</div>
-                {% if resume.learning.continuous_learning %}
-                <div class="pin-list">
-                    {% for learning_item in resume.learning.continuous_learning %}
-                    <div class="pin-number">{{ loop.index }}</div>
-                    <div class="pin-name">{{ learning_item }}</div>
-                    <div class="pin-type">PLAN</div>
-                    {% endfor %}
+            <!-- Secondary Column -->
+            <div class="secondary-column">
+                <!-- Skills -->
+                {% if resume.skills %}
+                <div class="section-card skills-section">
+                    <header class="card-header">
+                        <h2 class="card-title">⚙️ TECHNICAL SKILLS</h2>
+                        <span class="card-ref">REF: TECH-001</span>
+                    </header>
+                    
+                                         <div class="skills-grid">
+                         {% for skill_group in resume.skills %}
+                         <div class="skill-category">
+                             <h3 class="skill-category-title">{{ skill_group.category }}</h3>
+                             <div class="skill-items">
+                                 {% for skill_item in skill_group['items'] %}
+                                 <div class="skill-item">{{ skill_item }}</div>
+                                 {% endfor %}
+                             </div>
+                         </div>
+                         {% endfor %}
+                     </div>
                 </div>
                 {% endif %}
-            </div>
-        </div>
-        {% endif %}
-        
-        <!-- Education Component -->
-        {% if resume.education %}
-        <div class="component">
-            <header class="component-header">
-                <h2 class="component-title">Education Module</h2>
-                <span class="component-ref">REF: EDU-001</span>
-            </header>
-            
-            {% for education_item in resume.education %}
-            <div class="state-monitor">
-                <div class="state-monitor-header">{{ education_item.degree }}</div>
-                <div class="state-grid">
-                    <span class="state-label">Institution</span>
-                    <span class="state-value">{{ education_item.institution }}</span>
-                    <span class="state-label">Dates</span>
-                    <span class="state-value">{{ education_item.dates }}</span>
-                    {% if education_item.location %}
-                    <span class="state-label">Location</span>
-                    <span class="state-value">{{ education_item.location }}</span>
-                    {% endif %}
-                    {% if education_item.note %}
-                    <span class="state-label">Note</span>
-                    <span class="state-value">{{ education_item.note }}</span>
-                    {% endif %}
-                </div>
-                {% if education_item.details %}
-                <div class="pin-list">
-                    {% for detail in education_item.details %}
-                    <div class="pin-number">{{ loop.index }}</div>
-                    <div class="pin-name">{{ detail }}</div>
-                    <div class="pin-type">DETAIL</div>
-                    {% endfor %}
+                
+                <!-- Education -->
+                {% if resume.education %}
+                <div class="section-card education-section">
+                    <header class="card-header">
+                        <h2 class="card-title">🎓 EDUCATION</h2>
+                        <span class="card-ref">REF: EDU-001</span>
+                    </header>
+                    
+                    <div class="education-list">
+                        {% for education_item in resume.education %}
+                        <div class="education-item">
+                            <div class="education-degree">{{ education_item.degree }}</div>
+                            <div class="education-institution">{{ education_item.institution }}</div>
+                            <div class="education-meta">
+                                <span class="education-dates">{{ education_item.dates }}</span>
+                                {% if education_item.note %}
+                                <span class="education-note">{{ education_item.note }}</span>
+                                {% endif %}
+                            </div>
+                            {% if education_item.details %}
+                            <div class="education-details">
+                                {% for detail in education_item.details %}
+                                <div class="education-detail">• {{ detail }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        
-        <!-- Projects Component -->
-        {% if resume.projects %}
-        <div class="component">
-            <header class="component-header">
-                <h2 class="component-title">Project Modules</h2>
-                <span class="component-ref">REF: PROJ-001</span>
-            </header>
-            
-            {% if resume.projects %}
-            {% for project in resume.projects %}
-            <div class="state-monitor">
-                <div class="state-monitor-header">{{ project.name }}</div>
-                <div class="state-grid">
-                    {% if project.technologies %}
-                    <span class="state-label">Tech Stack</span>
-                    <span class="state-value">{{ project.technologies }}</span>
-                    {% endif %}
-                    {% if project.link %}
-                    <span class="state-label">Link</span>
-                    <span class="state-value">{{ project.link if project.link else 'N/A' }}</span>
-                    {% endif %}
-                </div>
-                {% if project.highlights %}
-                <div class="pin-list">
-                    {% for highlight in project.highlights %}
-                    <div class="pin-number">{{ loop.index }}</div>
-                    <div class="pin-name">{{ highlight }}</div>
-                    <div class="pin-type">FEAT</div>
-                    {% endfor %}
+                
+                <!-- Achievements -->
+                {% if resume.achievements %}
+                <div class="section-card achievements-section">
+                    <header class="card-header">
+                        <h2 class="card-title">🏆 ACHIEVEMENTS</h2>
+                        <span class="card-ref">REF: ACH-001</span>
+                    </header>
+                    
+                                         <div class="achievements-list">
+                         {% for achievement in resume.achievements['items'] %}
+                         <div class="achievement-item">
+                             <span class="achievement-bullet">★</span>
+                             <span class="achievement-text">{{ achievement }}</span>
+                         </div>
+                         {% endfor %}
+                     </div>
                 </div>
                 {% endif %}
-            </div>
-            {% endfor %}
-            {% endif %}
-        </div>
-        {% endif %}
-        
-        <!-- System Status Panel -->
-        <div class="component">
-            <header class="component-header">
-                <h2 class="component-title">System Status</h2>
-                <span class="component-ref">REF: SYS-001</span>
-            </header>
-            
-            <div class="state-monitor">
-                <div class="state-monitor-header">
-                    <span class="status-indicator success"></span>
-                    Runtime Status
+                
+                <!-- Languages -->
+                {% if resume.languages %}
+                <div class="section-card languages-section">
+                    <header class="card-header">
+                        <h2 class="card-title">🌍 LANGUAGES</h2>
+                        <span class="card-ref">REF: LANG-001</span>
+                    </header>
+                    
+                                         <div class="languages-list">
+                         {% for lang_item in resume.languages['items'] %}
+                         <div class="language-item">
+                             <span class="language-name">{{ lang_item.language }}</span>
+                             <span class="language-level">{{ lang_item.proficiency }}</span>
+                         </div>
+                         {% endfor %}
+                     </div>
                 </div>
-                <div class="state-grid">
-                    <span class="state-label">Loaded Sections</span>
-                    <span class="state-value">{{ resume.keys()|length }}</span>
-                    <span class="state-label">Template Engine</span>
-                    <span class="state-value">Jinja2</span>
-                    <span class="state-label">Backend</span>
-                    <span class="state-value">FastAPI</span>
-                    <span class="state-label">Data Format</span>
-                    <span class="state-value">TOML</span>
+                {% endif %}
+                
+                <!-- Learning -->
+                {% if resume.learning %}
+                <div class="section-card learning-section">
+                    <header class="card-header">
+                        <h2 class="card-title">📚 CONTINUOUS LEARNING</h2>
+                        <span class="card-ref">REF: LEARN-001</span>
+                    </header>
+                    
+                    {% if resume.learning.focus_areas %}
+                    <div class="learning-subsection">
+                        <h3 class="learning-subtitle">Current Focus</h3>
+                        <div class="learning-items">
+                            {% for focus in resume.learning.focus_areas %}
+                            <div class="learning-item">• {{ focus }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if resume.learning.continuous_learning %}
+                    <div class="learning-subsection">
+                        <h3 class="learning-subtitle">Planned Development</h3>
+                        <div class="learning-items">
+                            {% for learning_item in resume.learning.continuous_learning %}
+                            <div class="learning-item">• {{ learning_item }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <!-- System Status -->
+                <div class="section-card system-section">
+                    <header class="card-header">
+                        <h2 class="card-title">⚡ SYSTEM STATUS</h2>
+                        <span class="card-ref">REF: SYS-001</span>
+                    </header>
+                    
+                    <div class="system-info">
+                        <div class="system-item">
+                            <span class="system-label">Data Format</span>
+                            <span class="system-value">JSON</span>
+                        </div>
+                        <div class="system-item">
+                            <span class="system-label">Sections Loaded</span>
+                            <span class="system-value">{{ resume.keys()|length }}</span>
+                        </div>
+                        <div class="system-item">
+                            <span class="system-label">Template Engine</span>
+                            <span class="system-value">Jinja2</span>
+                        </div>
+                        <div class="system-item">
+                            <span class="system-label">Backend</span>
+                            <span class="system-value">FastAPI</span>
+                        </div>
+                    </div>
+                    
+                    <div id="state-data"></div>
                 </div>
             </div>
-            
-            <div class="state-monitor">
-                <div class="state-monitor-header">Control Panel</div>
-                <button class="control-btn" hx-get="/state" hx-target="#state-data" hx-swap="innerHTML">Reload Data</button>
-                <button class="control-btn" onclick="window.print()">Export PDF</button>
-                <button class="control-btn" onclick="window.location.href='/state'">Raw State</button>
-            </div>
-            
-            <div class="state-monitor">
-                <div class="state-monitor-header">Available Endpoints</div>
-                <div class="pin-list">
-                    <div class="pin-number">01</div>
-                    <div class="pin-name">GET /</div>
-                    <div class="pin-type">HTML</div>
-                    <div class="pin-number">02</div>
-                    <div class="pin-name">GET /state</div>
-                    <div class="pin-type">JSON</div>
-                    <div class="pin-number">03</div>
-                    <div class="pin-name">GET /state/{section}</div>
-                    <div class="pin-type">TOML</div>
-                </div>
-            </div>
-            
-            <div id="state-data"></div>
         </div>
     </div>
     
@@ -367,8 +340,18 @@
             }
         }
         
-        // Initialize on page load
-        initTheme();
+        // Smooth scrolling for internal links
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            
+            // Add print styles optimization
+            const printButton = document.querySelector('button[onclick="window.print()"]');
+            if (printButton) {
+                printButton.addEventListener('click', function() {
+                    setTimeout(() => window.print(), 100);
+                });
+            }
+        });
     </script>
 </body>
 </html> 
