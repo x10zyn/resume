@@ -1,135 +1,138 @@
-# Resume Generation System - Unified TOML Edition
+# Resume Generation System - Unified JSON Edition
 
-This directory contains a modern resume management system that allows you to:
-- Edit resume data in structured TOML format (easy to write, easy to parse)
-- Use external LaTeX templates (no hardcoded templates in scripts)
-- Generate professional LaTeX and PDF formats automatically
-- Maintain separation between content and presentation
-- Version control resume data independently from templates
-
-## 📁 Directory Structure
+This resume generation system creates professional resumes in multiple formats (Markdown, LaTeX, PDF) from structured JSON data files.
+- Edit resume data in structured JSON format (easy to write, easy to parse)
+- Generate professional resumes in multiple formats (Markdown, LaTeX, PDF)
+- Job-specific resume variants from modular data
+- External LaTeX templates for consistent professional styling
+- Terminal-style webapp for real-time editing and preview
 
 ```
-resume/
-├── sections/                   # Modular TOML data files
-│   ├── personal.toml          # Contact information
-│   ├── summary.toml           # Professional summary
-│   ├── skills.toml            # Technical skills
-│   ├── experience.toml        # Work experience
-│   ├── projects.toml          # Key projects
-│   ├── education.toml         # Education & certifications
-│   ├── achievements.toml      # Notable achievements
-│   ├── learning.toml          # Learning goals
-│   ├── languages.toml         # Language proficiencies
-│   ├── metadata.toml          # File metadata
+project/
+├── sections/                   # Modular JSON data files
+│   ├── personal.json          # Contact information
+│   ├── summary.json           # Professional summary
+│   ├── skills.json            # Technical skills
+│   ├── experience.json        # Work experience
+│   ├── projects.json          # Key projects
+│   ├── education.json         # Education & certifications
+│   ├── achievements.json      # Notable achievements
+│   ├── learning.json          # Learning goals
+│   ├── languages.json         # Language proficiencies
+│   ├── metadata.json          # File metadata
 │   └── README.md              # Section documentation
-├── templates/                  # LaTeX templates
-│   └── modern_template.tex    # Default template
-├── scripts/                    # Generation scripts
-│   ├── resume_generator.py    # Main generator script
-│   ├── generate_resume.sh     # Shell wrapper
-│   └── README.md              # Script documentation
-├── jobs/                       # Job-specific resume variants
-│   └── python-backend/        # Example: Python backend role
-├── docs/                       # Documentation
-│   └── getting-started.md     # Quick start guide
-├── archive/                    # Legacy files (for reference)
-├── output/                     # Generated files (gitignored)
-├── .gitignore                  # Git ignore patterns
-├── CONTRIBUTING.md             # Contribution guidelines
-├── LICENSE                     # MIT License
-├── requirements.txt            # Python dependencies
-└── README.md                   # This file
+├── jobs/                      # Job-specific resume variants
+│   ├── job-name/             # Tailored for specific job
+│   │   └── *.json            # Modified JSON files
+│   └── README.md             # Jobs documentation
+├── scripts/                   # Generation scripts
+│   ├── resume_generator.py   # Main generator script
+│   └── README.md             # Scripts documentation
+├── templates/                 # LaTeX templates
+│   └── modern_template.tex   # Professional LaTeX template
+├── webapp/                    # Terminal-style web interface
+│   ├── app.py                # FastAPI application
+│   ├── templates/            # HTML templates
+│   ├── static/               # CSS, JS assets
+│   └── README.md             # Webapp documentation
+├── output/                    # Generated files (PDF, LaTeX, MD)
+└── README.md                 # This file
 ```
 
 ## 🚀 Quick Start
 
-### Generate All Formats
-```bash
-python3 scripts/resume_generator.py
+1. **Clone & setup**:
+   ```sh
+   git clone <repo-url>
+   cd resume
+   pip install -r requirements.txt
+   ```
+
+2. **Edit your data**: Modify the JSON files in `sections/`
+
+3. **Generate resume**:
+   ```sh
+   python3 scripts/resume_generator.py
+   ```
+
+4. **View results**: Check `output/` for generated files
+
+5. **Web interface** (optional):
+   ```sh
+   cd webapp && uvicorn app:app --reload
+   ```
+
+## ✏️ Editing Your Resume (JSON Format)
+
+### JSON Structure
+The `sections/` directory contains modular JSON files for each resume section:
+
+```json
+// sections/personal.json
+{
+  "personal": {
+    "name": "Your Name",
+    "title": "Your Title",
+    "email": "you@example.com",
+    "phone": "+1234567890",
+    "location": "City, Country"
+  }
+}
+
+// sections/summary.json
+{
+  "summary": "Your professional summary here..."
+}
+
+// sections/skills.json
+{
+  "skills": {
+    "languages": ["Python", "JavaScript"],
+    "frameworks": ["FastAPI", "React"],
+    "tools": ["Git", "Docker"]
+  }
+}
+
+// sections/experience.json
+{
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Company Name",
+      "dates": "2023 - Present",
+      "location": "City, Country",
+      "highlights": [
+        "Achievement 1",
+        "Achievement 2"
+      ]
+    }
+  ]
+}
+
+// sections/projects.json
+{
+  "projects": [
+    {
+      "name": "Project Name",
+      "tech": "Technologies used",
+      "highlights": ["Feature 1", "Feature 2"]
+    }
+  ]
+}
+
+// sections/education.json
+{
+  "education": [
+    {
+      "degree": "Degree Name",
+      "institution": "University",
+      "year": "2023"
+    }
+  ]
+}
 ```
 
-### Generate Specific Format
-```bash
-# Markdown only
-python3 scripts/resume_generator.py --format markdown
-
-# LaTeX only  
-python3 scripts/resume_generator.py --format latex
-
-# PDF only
-python3 scripts/resume_generator.py --format pdf
-```
-
-### Use Custom Template
-```bash
-python3 scripts/resume_generator.py --template my_custom_template.tex --template-dir my_templates/
-```
-
-## ✏️ Editing Your Resume (TOML Format)
-
-### TOML Structure
-The `sections/` directory contains modular TOML files for each resume section:
-
-```toml
-# sections/personal.toml
-[personal]
-name = "Your Name"
-title = "Your Professional Title"
-location = "Your Location"
-email = "your.email@example.com"
-phone = "+1 234 567 8900"
-github = "github.com/yourusername"
-linkedin = "linkedin.com/in/yourprofile"
-website = "yourwebsite.com"
-
-# sections/summary.toml
-[summary]
-text = """Your professional summary here..."""
-
-# sections/skills.toml
-[[skills]]
-category = "Backend Development"
-items = [
-    "**Python** (Expert) - FastAPI, Django, Flask",
-    "**Node.js** (Advanced) - Express, RESTful APIs"
-]
-
-# sections/experience.toml
-[[experience]]
-title = "Software Engineer"
-company = "Company Name"
-dates = "Jan 2020 - Present"
-location = "City, State"
-description = "Brief role description"
-highlights = [
-    "Achievement 1 with specific impact",
-    "Achievement 2 with metrics"
-]
-
-# sections/projects.toml
-[[projects]]
-name = "Project Name"
-technologies = "Tech1, Tech2, Tech3"
-link = "https://github.com/user/repo"
-highlights = [
-    "What you built and why",
-    "Technical challenges solved"
-]
-
-# sections/education.toml
-[[education]]
-degree = "Your Degree"
-institution = "University Name"
-dates = "2016-2020"
-location = "City, State"
-note = "Cum Laude, GPA: 3.9/4.0"
-details = [
-    "Relevant coursework or achievements"
-]
-```
-
-### Benefits of TOML Format
+### Benefits of JSON Format
 
 1. **Easy to Write**: Human-readable syntax, similar to INI files
 2. **Easy to Parse**: Structured data that computers can easily process
@@ -216,7 +219,7 @@ Templates are stored in `templates/` and use placeholder syntax:
 
 ## 📋 Features
 
-### TOML-based Architecture
+### JSON-based Architecture
 - **Structured Data**: Well-defined schema for resume content
 - **Type Safety**: Proper data types (strings, arrays, tables)
 - **Easy Editing**: Human-readable format with syntax highlighting
@@ -241,9 +244,9 @@ Templates are stored in `templates/` and use placeholder syntax:
 
 Create job-specific versions by:
 
-1. **Copy TOML files**: `cp -r sections/ jobs/job-name/`
+1. **Copy JSON files**: `cp -r sections/ jobs/job-name/`
 2. **Modify content**: Edit the copied files for specific requirements
-3. **Generate**: `python3 scripts/resume_generator.py --toml-dir jobs/job-name/`
+3. **Generate**: `python3 scripts/resume_generator.py --json-dir jobs/job-name/`
 4. **Track versions**: Use git to manage different resume variants
 
 See `jobs/README.md` for detailed guidance on creating tailored resumes.
@@ -267,8 +270,8 @@ python3 scripts/resume_generator.py --format pdf
 
 ### Custom Paths
 ```bash
-# Use different TOML files
-python3 scripts/resume_generator.py --toml-file path/to/resume.toml
+# Use different JSON files
+python3 scripts/resume_generator.py --json-file path/to/resume.json
 
 # Use different template directory
 python3 scripts/resume_generator.py --template-dir my_templates/
@@ -282,7 +285,7 @@ python3 scripts/resume_generator.py --template academic_template.tex
 # Generate resumes for multiple job applications
 for job in marketing tech finance; do
     python3 scripts/resume_generator.py \
-        --toml-file "ideal-cvs/$job/" \
+        --json-file "ideal-cvs/$job/" \
         --format pdf
 done
 ```
@@ -291,8 +294,8 @@ done
 
 ### Common Issues
 
-1. **TOML Syntax Errors**
-   - Validate TOML syntax using online tools
+1. **JSON Syntax Errors**
+   - Validate JSON syntax using online tools
    - Check string quoting (use `"""` for multi-line strings)
    - Ensure proper array formatting
 
@@ -302,7 +305,7 @@ done
    - Verify template placeholder syntax
 
 3. **Missing Content**
-   - Ensure all required TOML sections exist
+   - Ensure all required JSON sections exist
    - Check for empty arrays or missing fields
    - Verify file paths and permissions
 
@@ -334,43 +337,47 @@ Add debug prints to the generator script or check the `.log` file in the output 
 ### From Legacy System
 The legacy markdown-based system has been removed. To migrate:
 
-1. **Data**: TOML files in `sections/` are the single source of truth
+1. **Data**: JSON files in `sections/` are the single source of truth
 2. **Scripts**: Use `resume_generator.py` instead of old scripts
 3. **Templates**: LaTeX templates in `templates/` directory
 4. **Output**: Generated files in `output/` directory
 
 ### From Single Markdown File
 1. Extract sections from `archive/resume_legacy.md`
-2. Convert to TOML format following the schema
+2. Convert to JSON format following the schema
 3. Create or customize a LaTeX template
 4. Generate with new system
 
 ## 📚 Examples
 
 ### Adding New Experience
-```toml
-[[experience]]
-title = "Senior Software Engineer"
-company = "New Company"
-dates = "June 2025 - Present"
-location = "Remote"
-description = "Leading backend development for fintech platform"
-highlights = [
-    "Architected microservices handling 1M+ daily transactions",
-    "Reduced API response time by 40% through optimization",
-    "Mentored team of 5 junior developers"
-]
+```json
+{
+  "experience": [
+    {
+      "title": "Senior Software Engineer",
+      "company": "New Company",
+      "dates": "June 2025 - Present",
+      "location": "Remote",
+      "highlights": [
+        "Architected microservices handling 1M+ daily transactions",
+        "Reduced API response time by 40% through optimization",
+        "Mentored team of 5 junior developers"
+      ]
+    }
+  ]
+}
 ```
 
 ### Adding New Skill Category
-```toml
-[[skills]]
-category = "Cloud & DevOps"
-items = [
-    "**AWS** (Advanced) - EC2, Lambda, RDS, S3",
-    "**Docker** (Expert) - Multi-stage builds, orchestration",
-    "**Kubernetes** (Intermediate) - Deployments, services, ingress"
-]
+```json
+{
+  "skills": {
+    "languages": ["Python", "JavaScript"],
+    "frameworks": ["FastAPI", "React"],
+    "tools": ["Git", "Docker"]
+  }
+}
 ```
 
 ### Creating Academic Template
@@ -380,7 +387,7 @@ Create `templates/academic_template.tex` with different sections like Publicatio
 
 ## 📊 Version History
 
-- **v3.0**: Unified TOML-based system with external templates
+- **v3.0**: Unified JSON-based system with external templates
 - **v2.0**: Modular section-based architecture (deprecated)
 - **v1.0**: Single-file markdown with parsing-based generation (archived)
 

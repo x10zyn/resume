@@ -1,89 +1,69 @@
 #!/usr/bin/env python3
 """
-Resume Generator - Unified System
-Generates LaTeX and PDF resumes from modular TOML data files using external template files
+Generates LaTeX and PDF resumes from modular JSON data files using external template files
 """
 
-import os
-import subprocess
 import argparse
+import json
+import os
 import re
-from pathlib import Path
+import subprocess
+import sys
 from datetime import datetime
+from pathlib import Path
 
-try:
-    import tomllib  # Python 3.11+
-except ImportError:
-    try:
-        import tomli as tomllib  # Fallback for older Python versions
-    except ImportError:
-        print("❌ TOML library not found. Install with: pip install tomli")
-        exit(1)
 
 class ResumeGenerator:
-    def __init__(self, sections_dir="sections", template_dir="templates"):
-        # Get the project root directory (parent of scripts directory)
-        script_dir = Path(__file__).parent
-        project_root = script_dir.parent
-        
-        # Set up paths relative to project root
-        self.sections_dir = project_root / sections_dir
-        self.template_dir = project_root / template_dir
-        self.output_dir = project_root / "output"
+    """
+    A comprehensive resume generator that loads modular JSON files and generates
+    professional LaTeX and PDF outputs using external template files.
+    """
+
+    def __init__(self, sections_dir="sections", templates_dir="templates", output_dir="output"):
+        self.sections_dir = Path(sections_dir)
+        self.templates_dir = Path(templates_dir)
+        self.output_dir = Path(output_dir)
+
+        # Ensure output directory exists
         self.output_dir.mkdir(exist_ok=True)
-        
-        # Load and combine all modular TOML files
-        self.data = self.load_modular_toml_data()
-    
-    def load_modular_toml_data(self):
-        """Load all TOML files from sections directory and combine into single data structure"""
+
+        # Load and combine all modular JSON files
+        self.data = self.load_modular_json_data()
+
+    def load_modular_json_data(self):
+        """Load all JSON files from sections directory and combine into single data structure"""
         combined_data = {}
-        
-        # Define the expected TOML files and their content structure
-        toml_files = {
-            'personal.toml': 'personal',
-            'summary.toml': 'summary', 
-            'skills.toml': 'skills',
-            'experience.toml': 'experience',
-            'projects.toml': 'projects',
-            'education.toml': 'education',
-            'achievements.toml': 'achievements',
-            'learning.toml': 'learning',
-            'languages.toml': 'languages',
-            'metadata.toml': 'metadata'
+
+        # Define the expected JSON files and their content structure
+        json_files = {
+            'personal.json': 'personal',
+            'summary.json': 'summary',
+            'skills.json': 'skills',
+            'experience.json': 'experience',
+            'projects.json': 'projects',
+            'education.json': 'education',
+            'achievements.json': 'achievements',
+            'learning.json': 'learning',
+            'languages.json': 'languages',
+            'metadata.json': 'metadata'
         }
-        
-        for filename, data_key in toml_files.items():
-            toml_path = self.sections_dir / filename
-            
-            if toml_path.exists():
+
+        for filename, data_key in json_files.items():
+            json_path = self.sections_dir / filename
+
+            if json_path.exists():
                 try:
-                    with open(toml_path, 'rb') as f:
-                        file_data = tomllib.load(f)
-                        
-                    # Merge the data - handle both single sections and arrays
-                    if data_key in file_data:
-                        combined_data[data_key] = file_data[data_key]
-                    else:
-                        # If the key doesn't exist in the file, merge all top-level keys
+                    with open(json_path, 'r', encoding='utf-8') as f:
+                        file_data = json.load(f)
                         combined_data.update(file_data)
-                        
-                    print(f"✅ Loaded {filename}")
+                        print(f"✅ Loaded {filename}")
                 except Exception as e:
-                    print(f"⚠️  Warning: Could not load {filename}: {e}")
+                    print(f"❌ Error loading {filename}: {e}")
             else:
-                print(f"⚠️  Warning: {filename} not found, skipping...")
-        
-        # Validate that we have essential data
-        required_sections = ['personal']
-        missing_sections = [section for section in required_sections if section not in combined_data]
-        
-        if missing_sections:
-            raise ValueError(f"Missing required sections: {missing_sections}")
-        
-        print(f"📄 Successfully loaded {len(combined_data)} resume sections")
+                print(f"⚠️  {filename} not found, skipping...")
+
         return combined_data
-    
+
     def clean_phone_for_tel(self, phone):
         """Clean phone number for tel: links"""
         return re.sub(r'[^\d+]', '', phone)
@@ -352,7 +332,7 @@ class ResumeGenerator:
     
     def generate_latex_from_template(self, template_name="modern_template.tex"):
         """Generate LaTeX from template file"""
-        template_path = self.template_dir / template_name
+        template_path = self.templates_dir / template_name
         output_path = self.output_dir / "resume.tex"
         
         if not template_path.exists():
@@ -439,8 +419,8 @@ class ResumeGenerator:
             os.chdir(original_dir)
     
     def generate_markdown(self):
-        """Generate markdown version from TOML data"""
-        output_path = self.output_dir / "resume_from_toml.md"
+        """Generate markdown version from JSON data"""
+        output_path = self.output_dir / "resume_from_json.md"
         
         markdown_content = []
         
@@ -575,7 +555,7 @@ class ResumeGenerator:
     
     def generate_all_formats(self, template_name="modern_template.tex"):
         """Generate all resume formats"""
-        print("🚀 Generating resume from TOML data...")
+        print("🚀 Generating resume from JSON data...")
         
         # Generate markdown
         self.generate_markdown()
@@ -588,39 +568,43 @@ class ResumeGenerator:
         
         print(f"\n📁 All files generated in: {self.output_dir}")
         print("📄 Available formats:")
-        print("   - resume_from_toml.md (Markdown from TOML)")
+        print("   - resume_from_json.md (Markdown from JSON)")
         print("   - resume.tex (LaTeX from template)")
         print("   - resume.pdf (PDF - if LaTeX is installed)")
 
 def main():
-    parser = argparse.ArgumentParser(description='Generate resume from TOML data using external templates')
-    parser.add_argument('--sections-dir', default='sections', help='Directory containing modular TOML files')
-    parser.add_argument('--template', default='modern_template.tex', help='LaTeX template file name')
-    parser.add_argument('--template-dir', default='templates', help='Directory containing templates')
-    parser.add_argument('--format', choices=['all', 'markdown', 'latex', 'pdf'], 
-                       default='all', help='Output format')
-    
+    print("🚀 Generating resume from JSON data...")
+
+    parser = argparse.ArgumentParser(description='Generate resume from JSON data using external templates')
+    parser.add_argument('--sections-dir', default='sections', help='Directory containing modular JSON files')
+    parser.add_argument('--templates-dir', default='templates', help='Directory containing LaTeX template files')
+    parser.add_argument('--output-dir', default='output', help='Output directory for generated files')
+    parser.add_argument('--latex-only', action='store_true', help='Generate only LaTeX, skip PDF compilation')
+
     args = parser.parse_args()
-    
+
     try:
-        generator = ResumeGenerator(args.sections_dir, args.template_dir)
-        
-        if args.format == 'all':
-            generator.generate_all_formats(args.template)
-        elif args.format == 'markdown':
-            generator.generate_markdown()
-        elif args.format == 'latex':
-            generator.generate_latex_from_template(args.template)
-        elif args.format == 'pdf':
-            latex_file = generator.generate_latex_from_template(args.template)
-            generator.generate_pdf_from_latex(latex_file)
-    
-    except FileNotFoundError as e:
-        print(f"❌ Error: {e}")
+        generator = ResumeGenerator(
+            sections_dir=args.sections_dir,
+            templates_dir=args.templates_dir,
+            output_dir=args.output_dir
+        )
+
+        generator.generate_all_formats()
+
+        print("\n🎉 Resume generation complete!")
+        print("📁 Generated files:")
+        print(f"   - resume_from_json.md (Markdown from JSON)")
+
+        if not args.latex_only:
+            print(f"   - resume.pdf (Professional PDF)")
+            print(f"   - resume.tex (LaTeX source)")
+
     except Exception as e:
-        print(f"❌ Unexpected error: {e}")
-        import traceback
-        traceback.print_exc()
+        print(f"❌ Error during generation: {e}")
+        return 1
+
+    return 0
 
 if __name__ == '__main__':
     main() 

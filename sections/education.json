@@ -1,0 +1,41 @@
+{
+  "education": [
+    {
+      "degree": "Bachelor of Electrical and Electronic Engineering (Telecommunications)",
+      "institution": "Stellenbosch University",
+      "dates": "2016-2020",
+      "location": "Stellenbosch, South Africa",
+      "note": "Cum Laude Final Year Project",
+      "details": []
+    },
+    {
+      "degree": "Techpreneurship Data Science Bootcamp",
+      "institution": "Stellenbosch University LaunchLab",
+      "dates": "2021",
+      "location": "",
+      "note": "",
+      "details": [
+        "Machine learning pipelines, big data processing, Python ML frameworks",
+        "SCRUM/Agile methodology, business applications of AI/ML"
+      ]
+    },
+    {
+      "degree": "Integrated Supply Side Technology Certificate",
+      "institution": "CRSES, Stellenbosch University",
+      "dates": "2021",
+      "location": "",
+      "note": "",
+      "details": [
+        "Renewable energy integration, utility-scale storage, power system stability"
+      ]
+    },
+    {
+      "degree": "IEB Matric Certificate",
+      "institution": "Somerset College",
+      "dates": "2011-2015",
+      "location": "Somerset West, South Africa",
+      "note": "7 Distinctions",
+      "details": []
+    }
+  ]
+}

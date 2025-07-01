@@ -1,0 +1,85 @@
+{
+  "experience": [
+    {
+      "title": "Firmware Design Engineer (Contract)",
+      "company": "MicroCare",
+      "dates": "March 2024 - March 2025",
+      "location": "Port Elizabeth, South Africa",
+      "description": "Led firmware development for 50kW solar-powered DC-DC EV charger (TRL7)",
+      "highlights": [
+        "Designed and implemented firmware for high-voltage MPPT controller handling 1000V input/400V output",
+        "Developed communication stack using ISO 15118 and DIN 70121 standards for EV-EVSE interaction",
+        "Created RS485-based MC-COMS protocol for real-time data exchange between MPPT controllers and EVSE",
+        "Integrated WiFi monitoring system using ESP32-S3 with web interface for real-time charge analytics",
+        "Conducted rigorous hardware-in-loop testing with BMW iX3 EVs, achieving sufficient protocol compliance",
+        "Debugged critical SPI timing issues in PLC communication system, reducing packet loss and critical bottlenecks",
+        "Optimized PWM control algorithms for solar input variability, maintaining 92% conversion efficiency"
+      ]
+    },
+    {
+      "title": "Software Developer",
+      "company": "Radinium",
+      "dates": "January 2023 - March 2024",
+      "location": "Stellenbosch, South Africa",
+      "description": "",
+      "highlights": [
+        "Diagnosed and resolved critical failures in a legacy Ruby portal, ensuring business continuity",
+        "Led migration from legacy Ruby/Pedrino to a modern Next.js application with PostgreSQL backend",
+        "Built Python SDK integration for SAFR facial recognition platform",
+        "Developed custom Modbus TCP client from scratch for electric fence monitoring",
+        "Managed Ubuntu/Linode infrastructure with Nginx and SSL certificates",
+        "Implemented frame buffering and memory management for NVIDIA Jetson edge devices"
+      ]
+    },
+    {
+      "title": "Embedded Systems Engineer",
+      "company": "MicroCare",
+      "dates": "September 2022 - November 2022",
+      "location": "Contract",
+      "description": "",
+      "highlights": [
+        "Developed bi-directional EV charge controller with ESP32, including real-time monitoring",
+        "Implemented power management algorithms and safety protocols for electrical systems",
+        "Built responsive control dashboard with HTML/CSS/jQuery",
+        "Designed communication protocols between grid-tie inverter and charge controller"
+      ]
+    },
+    {
+      "title": "Freelance Software Developer",
+      "company": "Ergo Raffle",
+      "dates": "July 2022 - August 2022",
+      "location": "Remote",
+      "description": "",
+      "highlights": [
+        "Built Telegram notification bot using AWS Lambda and DynamoDB",
+        "Developed Node.js service with Telegraf API for automated crowd-funding notifications",
+        "Implemented message queuing and retry mechanisms for blockchain event processing"
+      ]
+    },
+    {
+      "title": "Research Developer",
+      "company": "CRSES, Stellenbosch University",
+      "dates": "August 2020 - March 2022",
+      "location": "Stellenbosch, South Africa",
+      "description": "",
+      "highlights": [
+        "Conducted energy audits for rural schools and analyzed energy consumption data",
+        "Created real-time energy monitoring system with Vue.js and Python backend",
+        "Contributed to research on renewable energy integration and grid stability",
+        "Designed data collection pipelines for solar inverters and smart meters"
+      ]
+    },
+    {
+      "title": "Python & Robotics Instructor",
+      "company": "Club Electron",
+      "dates": "January 2018 - November 2021",
+      "location": "Part-time",
+      "description": "",
+      "highlights": [
+        "Developed Python programming curriculum for high school students",
+        "Taught electronics fundamentals and Arduino programming to primary school students",
+        "Supported students in hands-on robotics and programming education"
+      ]
+    }
+  ]
+}

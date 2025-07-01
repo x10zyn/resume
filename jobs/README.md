@@ -1,80 +1,65 @@
 # Job-Specific Resume Variants
 
-This directory contains tailored resume versions for specific job applications. Each subdirectory represents a different job or role you're applying for.
+This directory contains job-specific resume customizations. Each subdirectory represents a tailored version of your resume optimized for a particular role or industry.
 
 ## Structure
-
 ```
 jobs/
-├── python-backend/          # Example: Python backend developer role
-│   ├── personal.toml        # Job-specific contact info
-│   ├── summary.toml         # Tailored professional summary
-│   ├── skills.toml          # Emphasized relevant skills
-│   ├── experience.toml      # Highlighted relevant experience
-│   ├── projects.toml        # Focused project examples
-│   ├── education.toml       # Relevant education details
-│   ├── achievements.toml    # Role-specific achievements
-│   ├── learning.toml        # Current learning goals
-│   ├── languages.toml       # Language proficiencies
-│   ├── metadata.toml        # File metadata
-│   ├── job-posting.md       # Original job posting (for reference)
-│   └── README.md            # Notes about this application
-├── frontend-developer/      # Example: Frontend developer role
-│   └── ... (similar structure)
-└── README.md                # This file
+├── job-name/                   # Directory per job application
+│   ├── personal.json        # Job-specific contact info
+│   ├── summary.json         # Tailored professional summary
+│   ├── skills.json          # Emphasized relevant skills
+│   ├── experience.json      # Highlighted relevant experience
+│   ├── projects.json        # Focused project examples
+│   ├── education.json       # Relevant education details
+│   ├── achievements.json    # Role-specific achievements
+│   ├── learning.json        # Current learning goals
+│   ├── languages.json       # Language proficiencies
+│   ├── metadata.json        # File metadata
+│   └── README.md           # Job-specific notes
+└── README.md              # This file
 ```
 
-## Creating Job-Specific Resumes
+## Creating Job-Specific Variants
 
-### 1. Create a New Job Directory
+### 1. Copy Base Files
 ```bash
-mkdir jobs/your-job-name
+cp -r sections/ jobs/[job-name]/
 ```
 
-### 2. Copy Base Resume Data
+### 2. Customize Content
+Edit the copied JSON files to:
+- Emphasize relevant skills and experience
+- Reorder sections by importance for the role
+- Adjust language and terminology for the industry
+- Highlight specific achievements that match job requirements
+
+### 3. Generate Resume
 ```bash
-cp -r sections/* jobs/your-job-name/
+python3 scripts/resume_generator.py --sections-dir jobs/[job-name]/
 ```
 
-### 3. Customize for the Role
-- **Update summary**: Tailor to the specific role requirements
-- **Emphasize skills**: Highlight relevant technical skills
-- **Reorder experience**: Put most relevant experience first
-- **Select projects**: Choose projects that match the role
-- **Adjust achievements**: Focus on role-specific accomplishments
+## Example: Python Backend Role
 
-### 4. Generate Job-Specific Resume
-```bash
-python3 scripts/resume_generator.py --toml-dir jobs/your-job-name/
-```
+For a Python backend developer position, you might:
+
+1. **skills.json**: Emphasize Python, databases, APIs
+2. **experience.json**: Highlight backend-related achievements
+3. **projects.json**: Focus on API development, data processing
+4. **summary.json**: Tailor to backend development focus
 
 ## Best Practices
 
-### Content Tailoring
-- **Keyword matching**: Include keywords from the job posting
-- **Relevant experience**: Emphasize experience that matches the role
-- **Project selection**: Choose projects that demonstrate required skills
-- **Achievement focus**: Highlight achievements relevant to the position
+1. **Start from Base**: Always copy from `sections/` to maintain consistency
+2. **Incremental Changes**: Make targeted adjustments rather than complete rewrites
+3. **Track Variants**: Use descriptive directory names (`python-backend`, `frontend-react`, etc.)
+4. **Version Control**: Commit each variant separately for easy comparison
+5. **Document Changes**: Add README.md explaining customizations for each job
 
-### File Organization
-- **Clear naming**: Use descriptive directory names
-- **Job posting**: Save the original job posting for reference
-- **Notes**: Document your customization decisions
-- **Version control**: Track changes for each application
-
-### Template Selection
-- **Industry appropriate**: Choose templates that fit the industry
-- **Company culture**: Consider the company's style and culture
-- **Role requirements**: Some roles may prefer different formats
-
-## Example: Python Backend Developer
-
-The `python-backend/` directory shows an example of tailoring for a Python backend role:
-
-- **Skills emphasis**: Python, FastAPI, Django, databases
-- **Experience focus**: Backend development, API design, database optimization
-- **Project selection**: Backend services, API development, database projects
-- **Achievements**: Performance improvements, scalability, system architecture
+## Generation
+```bash
+python3 scripts/resume_generator.py --sections-dir jobs/your-job-name/
+```
 
 ## Version Control Strategy
 

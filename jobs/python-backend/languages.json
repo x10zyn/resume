@@ -1,0 +1,18 @@
+{
+  "languages": {
+    "items": [
+      {
+        "language": "English",
+        "proficiency": "Native/Fluent"
+      },
+      {
+        "language": "German",
+        "proficiency": "Conversational"
+      },
+      {
+        "language": "Afrikaans",
+        "proficiency": "Conversational"
+      }
+    ]
+  }
+}
