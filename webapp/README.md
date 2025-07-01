@@ -13,11 +13,19 @@
 - **Backend:** FastAPI (async, explicit, modern Python)
 - **Frontend:** HTMX (dynamic, dense, interactive UI)
 - **Templating:** Jinja2 (content from JSON)
-- **Styling:** US Graphics CSS (terminal dark, square, dense)
+- **Styling:** TailwindCSS (utility-first, customized for terminal aesthetic)
+
+## Styling Approach
+- **TailwindCSS** via CDN with custom configuration
+- **Custom terminal color palette:** Green accents (#00ff41 dark, #2d6a2d light)
+- **Monospace fonts:** Fira Code, JetBrains Mono, SF Mono hierarchy
+- **Zero border radius:** Maintained square, angular aesthetic
+- **Dark/Light mode:** TailwindCSS class-based dark mode with system preference detection
+- **Dense, functional layout:** Grid systems, minimal whitespace, information-dense design
 
 ## Directory Structure
-- `static/` — CSS, JS, icons (US Graphics CSS included)
-- `templates/` — Jinja2 HTML templates
+- `static/` — Additional assets (CSS file removed after TailwindCSS refactor)
+- `templates/` — Jinja2 HTML templates with TailwindCSS utility classes
 - `state/` — Exposed app state, JSON
 - `utils/` — JSON parsing, state exposure, helpers
 - `app.py` — Main FastAPI app
@@ -44,6 +52,12 @@
 ## Content
 - All resume content is generated from JSON files or via Jinja2 templates.
 - State and logic are exposed for user inspection.
+- Styling is handled entirely through TailwindCSS utility classes.
+
+## Recent Changes
+- **TailwindCSS Migration:** Refactored from custom CSS to TailwindCSS while maintaining identical terminal aesthetic
+- **Improved Responsiveness:** Enhanced mobile/tablet layouts with TailwindCSS responsive utilities
+- **Better Dark Mode:** Leveraged TailwindCSS's built-in dark mode with system preference detection
 
 ---
 

@@ -1,57 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ resume.personal.name if resume.personal and resume.personal.name else 'Resume' }} — Technical Profile</title>
-    <link rel="stylesheet" href="/static/terminal.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['Fira Code', 'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'monospace']
+                    },
+                    colors: {
+                        'terminal-green': {
+                            light: '#2d6a2d',
+                            dark: '#00ff41'
+                        },
+                        'terminal-bg': {
+                            primary: {
+                                light: '#fafafa',
+                                dark: '#0a0a0a'
+                            },
+                            secondary: {
+                                light: '#ffffff',
+                                dark: '#121212'
+                            },
+                            tertiary: {
+                                light: '#f5f5f5',
+                                dark: '#1a1a1a'
+                            },
+                            hero: {
+                                light: '#f8f9fa',
+                                dark: '#111111'
+                            }
+                        }
+                    },
+                    borderRadius: {
+                        'none': '0'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-mono text-sm leading-relaxed overflow-x-hidden">
     <!-- Control Panel -->
-    <div class="control-panel">
-        <button class="theme-toggle" onclick="toggleTheme()">◐ THEME</button>
-        <div class="control-buttons">
-            <button class="control-btn" hx-get="/state" hx-target="#state-data" hx-swap="innerHTML">↻ RELOAD</button>
-            <button class="control-btn" onclick="window.print()">⎙ PRINT</button>
-            <button class="control-btn" onclick="window.location.href='/state'">⚡ API</button>
+    <div class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-gray-900/90 border-b-2 border-gray-300 dark:border-gray-700 px-6 py-3 flex justify-between items-center z-50 backdrop-blur-md">
+        <button class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 px-4 py-2 text-xs font-bold uppercase tracking-wider hover:bg-terminal-green-light hover:dark:bg-terminal-green-dark hover:text-white dark:hover:text-black transition-all duration-200 rounded-none" onclick="toggleTheme()">◐ THEME</button>
+        <div class="flex gap-2">
+            <button class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 px-4 py-2 text-xs font-bold uppercase tracking-wider hover:bg-terminal-green-light hover:dark:bg-terminal-green-dark hover:text-white dark:hover:text-black transition-all duration-200 rounded-none" hx-get="/state" hx-target="#state-data" hx-swap="innerHTML">↻ RELOAD</button>
+            <button class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 px-4 py-2 text-xs font-bold uppercase tracking-wider hover:bg-terminal-green-light hover:dark:bg-terminal-green-dark hover:text-white dark:hover:text-black transition-all duration-200 rounded-none" onclick="window.print()">⎙ PRINT</button>
+            <button class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 px-4 py-2 text-xs font-bold uppercase tracking-wider hover:bg-terminal-green-light hover:dark:bg-terminal-green-dark hover:text-white dark:hover:text-black transition-all duration-200 rounded-none" onclick="window.location.href='/state'">⚡ API</button>
         </div>
     </div>
     
-    <div class="main-container">
+    <div class="mt-16 p-8 max-w-7xl mx-auto">
         <!-- Hero Section -->
-        <section class="hero-section">
+        <section class="mb-12">
             {% if resume.personal %}
-            <div class="hero-card">
-                <div class="hero-header">
-                    <h1 class="hero-name">{{ resume.personal.name }}</h1>
-                    <div class="hero-title">{{ resume.personal.title }}</div>
-                    <div class="hero-location">📍 {{ resume.personal.location }}</div>
+            <div class="bg-gray-50 dark:bg-gray-900 border-2 border-terminal-green-light dark:border-terminal-green-dark p-8 mb-6 shadow-lg shadow-terminal-green-light/10 dark:shadow-terminal-green-dark/10">
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-[2px] mb-2 drop-shadow-sm">{{ resume.personal.name }}</h1>
+                    <div class="text-xl text-gray-600 dark:text-gray-400 mb-2 font-normal">{{ resume.personal.title }}</div>
+                    <div class="text-base text-gray-500 dark:text-gray-500">📍 {{ resume.personal.location }}</div>
                 </div>
                 
-                <div class="contact-grid">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                     {% if resume.personal.email %}
-                    <a href="mailto:{{ resume.personal.email }}" class="contact-item">
-                        <span class="contact-icon">✉</span>
-                        <span class="contact-value">{{ resume.personal.email }}</span>
+                    <a href="mailto:{{ resume.personal.email }}" class="flex items-center p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-terminal-green-light dark:hover:border-terminal-green-dark transform hover:-translate-y-px transition-all duration-200 rounded-none">
+                        <span class="text-lg mr-3 w-6 text-center">✉</span>
+                        <span class="text-sm font-medium">{{ resume.personal.email }}</span>
                     </a>
                     {% endif %}
                     {% if resume.personal.phone %}
-                    <a href="tel:{{ resume.personal.phone }}" class="contact-item">
-                        <span class="contact-icon">☏</span>
-                        <span class="contact-value">{{ resume.personal.phone }}</span>
+                    <a href="tel:{{ resume.personal.phone }}" class="flex items-center p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-terminal-green-light dark:hover:border-terminal-green-dark transform hover:-translate-y-px transition-all duration-200 rounded-none">
+                        <span class="text-lg mr-3 w-6 text-center">☏</span>
+                        <span class="text-sm font-medium">{{ resume.personal.phone }}</span>
                     </a>
                     {% endif %}
                     {% if resume.personal.github %}
-                    <a href="https://{{ resume.personal.github }}" class="contact-item" target="_blank">
-                        <span class="contact-icon">⚡</span>
-                        <span class="contact-value">{{ resume.personal.github }}</span>
+                    <a href="https://{{ resume.personal.github }}" class="flex items-center p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-terminal-green-light dark:hover:border-terminal-green-dark transform hover:-translate-y-px transition-all duration-200 rounded-none" target="_blank">
+                        <span class="text-lg mr-3 w-6 text-center">⚡</span>
+                        <span class="text-sm font-medium">{{ resume.personal.github }}</span>
                     </a>
                     {% endif %}
                     {% if resume.personal.linkedin %}
-                    <a href="https://{{ resume.personal.linkedin }}" class="contact-item" target="_blank">
-                        <span class="contact-icon">🔗</span>
-                        <span class="contact-value">{{ resume.personal.linkedin }}</span>
+                    <a href="https://{{ resume.personal.linkedin }}" class="flex items-center p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 hover:border-terminal-green-light dark:hover:border-terminal-green-dark transform hover:-translate-y-px transition-all duration-200 rounded-none" target="_blank">
+                        <span class="text-lg mr-3 w-6 text-center">🔗</span>
+                        <span class="text-sm font-medium">{{ resume.personal.linkedin }}</span>
                     </a>
                     {% endif %}
                 </div>
@@ -60,12 +99,12 @@
             
             <!-- Summary -->
             {% if resume.summary %}
-            <div class="summary-card">
-                <header class="card-header">
-                    <h2 class="card-title">🎯 EXECUTIVE SUMMARY</h2>
-                    <span class="card-ref">REF: SUM-001</span>
+            <div class="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 p-6">
+                <header class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-300 dark:border-gray-700">
+                    <h2 class="text-lg font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wide m-0">🎯 EXECUTIVE SUMMARY</h2>
+                    <span class="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-none">REF: SUM-001</span>
                 </header>
-                <div class="summary-content">
+                <div class="text-base leading-relaxed text-gray-900 dark:text-gray-100 mt-4">
                     {{ resume.summary.text }}
                 </div>
             </div>
@@ -73,43 +112,43 @@
         </section>
         
         <!-- Main Content Grid -->
-        <div class="content-grid">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             <!-- Primary Column -->
-            <div class="primary-column">
+            <div class="lg:col-span-2">
                 <!-- Experience -->
                 {% if resume.experience %}
-                <div class="section-card experience-section">
-                    <header class="card-header">
-                        <h2 class="card-title">💼 PROFESSIONAL EXPERIENCE</h2>
-                        <span class="card-ref">REF: EXP-001</span>
+                <div class="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 p-6 mb-8 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-terminal-green-light/10 dark:hover:shadow-terminal-green-dark/10 transition-all duration-300 rounded-none">
+                    <header class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-300 dark:border-gray-700">
+                        <h2 class="text-lg font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wide m-0">💼 PROFESSIONAL EXPERIENCE</h2>
+                        <span class="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-none">REF: EXP-001</span>
                     </header>
                     
-                    <div class="experience-timeline">
+                    <div class="relative">
                         {% for position in resume.experience %}
-                        <div class="experience-item">
-                            <div class="experience-header">
-                                <div class="position-info">
-                                    <h3 class="position-title">{{ position.title }}</h3>
-                                    <div class="company-name">{{ position.company }}</div>
+                        <div class="relative py-6 border-b border-gray-300 dark:border-gray-700 last:border-b-0">
+                            <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                                <div class="flex-1">
+                                    <h3 class="m-0 mb-1 text-lg text-gray-900 dark:text-gray-100 font-bold">{{ position.title }}</h3>
+                                    <div class="text-base text-terminal-green-light dark:text-terminal-green-dark font-semibold">{{ position.company }}</div>
                                 </div>
-                                <div class="position-meta">
-                                    <div class="position-dates">{{ position.dates }}</div>
+                                <div class="mt-2 md:mt-0 md:text-right md:flex-shrink-0 md:ml-4">
+                                    <div class="text-sm text-gray-600 dark:text-gray-400 font-semibold">{{ position.dates }}</div>
                                     {% if position.location %}
-                                    <div class="position-location">{{ position.location }}</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">{{ position.location }}</div>
                                     {% endif %}
                                 </div>
                             </div>
                             
                             {% if position.description %}
-                            <div class="position-description">{{ position.description }}</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-4 italic">{{ position.description }}</div>
                             {% endif %}
                             
                             {% if position.highlights %}
-                            <div class="achievements-list">
+                            <div class="mt-4">
                                 {% for highlight in position.highlights %}
-                                <div class="achievement-item">
-                                    <span class="achievement-bullet">▸</span>
-                                    <span class="achievement-text">{{ highlight }}</span>
+                                <div class="flex items-start mb-3 pl-2">
+                                    <span class="text-terminal-green-light dark:text-terminal-green-dark font-bold mr-3 flex-shrink-0 mt-0.5">▸</span>
+                                    <span class="text-sm leading-relaxed text-gray-900 dark:text-gray-100">{{ highlight }}</span>
                                 </div>
                                 {% endfor %}
                             </div>
@@ -122,28 +161,28 @@
                 
                 <!-- Projects -->
                 {% if resume.projects %}
-                <div class="section-card projects-section">
-                    <header class="card-header">
-                        <h2 class="card-title">🚀 KEY PROJECTS</h2>
-                        <span class="card-ref">REF: PROJ-001</span>
+                <div class="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 p-6 mb-8 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-terminal-green-light/10 dark:hover:shadow-terminal-green-dark/10 transition-all duration-300 rounded-none">
+                    <header class="flex justify-between items-center mb-6 pb-3 border-b-2 border-gray-300 dark:border-gray-700">
+                        <h2 class="text-lg font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wide m-0">🚀 KEY PROJECTS</h2>
+                        <span class="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-none">REF: PROJ-001</span>
                     </header>
                     
-                    <div class="projects-grid">
+                    <div class="grid gap-6">
                         {% for project in resume.projects %}
-                        <div class="project-item">
-                            <div class="project-header">
-                                <h3 class="project-name">{{ project.name }}</h3>
+                        <div class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-5 rounded-none">
+                            <div class="mb-4">
+                                <h3 class="m-0 mb-2 text-base text-gray-900 dark:text-gray-100 font-bold">{{ project.name }}</h3>
                                 {% if project.technologies %}
-                                <div class="project-tech">{{ project.technologies }}</div>
+                                <div class="text-sm text-terminal-green-light dark:text-terminal-green-dark font-semibold">{{ project.technologies }}</div>
                                 {% endif %}
                             </div>
                             
                             {% if project.highlights %}
-                            <div class="project-highlights">
+                            <div class="mt-4">
                                 {% for highlight in project.highlights %}
-                                <div class="project-highlight">
-                                    <span class="highlight-bullet">→</span>
-                                    <span class="highlight-text">{{ highlight }}</span>
+                                <div class="flex items-start mb-2">
+                                    <span class="text-terminal-green-light dark:text-terminal-green-dark mr-3 flex-shrink-0 mt-0.5">→</span>
+                                    <span class="text-sm leading-relaxed text-gray-900 dark:text-gray-100">{{ highlight }}</span>
                                 </div>
                                 {% endfor %}
                             </div>
@@ -156,53 +195,53 @@
             </div>
             
             <!-- Secondary Column -->
-            <div class="secondary-column">
+            <div class="lg:col-span-1">
                 <!-- Skills -->
                 {% if resume.skills %}
-                <div class="section-card skills-section">
-                    <header class="card-header">
-                        <h2 class="card-title">⚙️ TECHNICAL SKILLS</h2>
-                        <span class="card-ref">REF: TECH-001</span>
+                <div class="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 p-6 mb-8 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-terminal-green-light/10 dark:hover:shadow-terminal-green-dark/10 transition-all duration-300 rounded-none">
+                    <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 pb-3 border-b-2 border-gray-300 dark:border-gray-700 gap-2">
+                        <h2 class="text-lg font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wide m-0">⚙️ TECHNICAL SKILLS</h2>
+                        <span class="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-none">REF: TECH-001</span>
                     </header>
                     
-                                         <div class="skills-grid">
-                         {% for skill_group in resume.skills %}
-                         <div class="skill-category">
-                             <h3 class="skill-category-title">{{ skill_group.category }}</h3>
-                             <div class="skill-items">
-                                 {% for skill_item in skill_group['items'] %}
-                                 <div class="skill-item">{{ skill_item }}</div>
-                                 {% endfor %}
-                             </div>
-                         </div>
-                         {% endfor %}
-                     </div>
+                    <div class="grid gap-6">
+                        {% for skill_group in resume.skills %}
+                        <div class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-4 rounded-none">
+                            <h3 class="m-0 mb-3 text-sm text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wider font-bold">{{ skill_group.category }}</h3>
+                            <div class="grid gap-2">
+                                {% for skill_item in skill_group['items'] %}
+                                <div class="text-xs leading-relaxed text-gray-900 dark:text-gray-100 py-1 border-b border-gray-300 dark:border-gray-600 last:border-b-0">{{ skill_item }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
                 
                 <!-- Education -->
                 {% if resume.education %}
-                <div class="section-card education-section">
-                    <header class="card-header">
-                        <h2 class="card-title">🎓 EDUCATION</h2>
-                        <span class="card-ref">REF: EDU-001</span>
+                <div class="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 p-6 mb-8 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-terminal-green-light/10 dark:hover:shadow-terminal-green-dark/10 transition-all duration-300 rounded-none">
+                    <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 pb-3 border-b-2 border-gray-300 dark:border-gray-700 gap-2">
+                        <h2 class="text-lg font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wide m-0">🎓 EDUCATION</h2>
+                        <span class="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-none">REF: EDU-001</span>
                     </header>
                     
-                    <div class="education-list">
+                    <div class="grid gap-6">
                         {% for education_item in resume.education %}
-                        <div class="education-item">
-                            <div class="education-degree">{{ education_item.degree }}</div>
-                            <div class="education-institution">{{ education_item.institution }}</div>
-                            <div class="education-meta">
-                                <span class="education-dates">{{ education_item.dates }}</span>
+                        <div class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-5 rounded-none">
+                            <div class="text-base font-bold text-gray-900 dark:text-gray-100 mb-2">{{ education_item.degree }}</div>
+                            <div class="text-sm text-terminal-green-light dark:text-terminal-green-dark font-semibold mb-2">{{ education_item.institution }}</div>
+                            <div class="flex flex-wrap gap-4 mb-3">
+                                <span class="text-xs text-gray-600 dark:text-gray-400">{{ education_item.dates }}</span>
                                 {% if education_item.note %}
-                                <span class="education-note">{{ education_item.note }}</span>
+                                <span class="text-xs text-terminal-green-light dark:text-terminal-green-dark font-semibold">{{ education_item.note }}</span>
                                 {% endif %}
                             </div>
                             {% if education_item.details %}
-                            <div class="education-details">
+                            <div class="mt-3">
                                 {% for detail in education_item.details %}
-                                <div class="education-detail">• {{ detail }}</div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">• {{ detail }}</div>
                                 {% endfor %}
                             </div>
                             {% endif %}
@@ -214,67 +253,67 @@
                 
                 <!-- Achievements -->
                 {% if resume.achievements %}
-                <div class="section-card achievements-section">
-                    <header class="card-header">
-                        <h2 class="card-title">🏆 ACHIEVEMENTS</h2>
-                        <span class="card-ref">REF: ACH-001</span>
+                <div class="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 p-6 mb-8 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-terminal-green-light/10 dark:hover:shadow-terminal-green-dark/10 transition-all duration-300 rounded-none">
+                    <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 pb-3 border-b-2 border-gray-300 dark:border-gray-700 gap-2">
+                        <h2 class="text-lg font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wide m-0">🏆 ACHIEVEMENTS</h2>
+                        <span class="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-none">REF: ACH-001</span>
                     </header>
                     
-                                         <div class="achievements-list">
-                         {% for achievement in resume.achievements['items'] %}
-                         <div class="achievement-item">
-                             <span class="achievement-bullet">★</span>
-                             <span class="achievement-text">{{ achievement }}</span>
-                         </div>
-                         {% endfor %}
-                     </div>
+                    <div class="grid gap-2">
+                        {% for achievement in resume.achievements['items'] %}
+                        <div class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-3 flex items-start rounded-none">
+                            <span class="text-terminal-green-light dark:text-terminal-green-dark mr-3 flex-shrink-0">★</span>
+                            <span class="text-xs leading-relaxed text-gray-900 dark:text-gray-100">{{ achievement }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
                 
                 <!-- Languages -->
                 {% if resume.languages %}
-                <div class="section-card languages-section">
-                    <header class="card-header">
-                        <h2 class="card-title">🌍 LANGUAGES</h2>
-                        <span class="card-ref">REF: LANG-001</span>
+                <div class="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 p-6 mb-8 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-terminal-green-light/10 dark:hover:shadow-terminal-green-dark/10 transition-all duration-300 rounded-none">
+                    <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 pb-3 border-b-2 border-gray-300 dark:border-gray-700 gap-2">
+                        <h2 class="text-lg font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wide m-0">🌍 LANGUAGES</h2>
+                        <span class="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-none">REF: LANG-001</span>
                     </header>
                     
-                                         <div class="languages-list">
-                         {% for lang_item in resume.languages['items'] %}
-                         <div class="language-item">
-                             <span class="language-name">{{ lang_item.language }}</span>
-                             <span class="language-level">{{ lang_item.proficiency }}</span>
-                         </div>
-                         {% endfor %}
-                     </div>
+                    <div class="grid gap-3">
+                        {% for lang_item in resume.languages['items'] %}
+                        <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-3 rounded-none">
+                            <span class="font-semibold text-gray-900 dark:text-gray-100">{{ lang_item.language }}</span>
+                            <span class="text-xs text-terminal-green-light dark:text-terminal-green-dark font-semibold">{{ lang_item.proficiency }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
                 
                 <!-- Learning -->
                 {% if resume.learning %}
-                <div class="section-card learning-section">
-                    <header class="card-header">
-                        <h2 class="card-title">📚 CONTINUOUS LEARNING</h2>
-                        <span class="card-ref">REF: LEARN-001</span>
+                <div class="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 p-6 mb-8 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-terminal-green-light/10 dark:hover:shadow-terminal-green-dark/10 transition-all duration-300 rounded-none">
+                    <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 pb-3 border-b-2 border-gray-300 dark:border-gray-700 gap-2">
+                        <h2 class="text-lg font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wide m-0">📚 CONTINUOUS LEARNING</h2>
+                        <span class="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-none">REF: LEARN-001</span>
                     </header>
                     
                     {% if resume.learning.focus_areas %}
-                    <div class="learning-subsection">
-                        <h3 class="learning-subtitle">Current Focus</h3>
-                        <div class="learning-items">
+                    <div class="mb-6">
+                        <h3 class="text-sm text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wider font-bold m-0 mb-3">Current Focus</h3>
+                        <div class="grid gap-2">
                             {% for focus in resume.learning.focus_areas %}
-                            <div class="learning-item">• {{ focus }}</div>
+                            <div class="text-xs text-gray-900 dark:text-gray-100 p-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-none">• {{ focus }}</div>
                             {% endfor %}
                         </div>
                     </div>
                     {% endif %}
                     
                     {% if resume.learning.continuous_learning %}
-                    <div class="learning-subsection">
-                        <h3 class="learning-subtitle">Planned Development</h3>
-                        <div class="learning-items">
+                    <div class="mb-0">
+                        <h3 class="text-sm text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wider font-bold m-0 mb-3">Planned Development</h3>
+                        <div class="grid gap-2">
                             {% for learning_item in resume.learning.continuous_learning %}
-                            <div class="learning-item">• {{ learning_item }}</div>
+                            <div class="text-xs text-gray-900 dark:text-gray-100 p-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-none">• {{ learning_item }}</div>
                             {% endfor %}
                         </div>
                     </div>
@@ -283,32 +322,32 @@
                 {% endif %}
                 
                 <!-- System Status -->
-                <div class="section-card system-section">
-                    <header class="card-header">
-                        <h2 class="card-title">⚡ SYSTEM STATUS</h2>
-                        <span class="card-ref">REF: SYS-001</span>
+                <div class="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 p-6 mb-8 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-terminal-green-light/10 dark:hover:shadow-terminal-green-dark/10 transition-all duration-300 rounded-none">
+                    <header class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 pb-3 border-b-2 border-gray-300 dark:border-gray-700 gap-2">
+                        <h2 class="text-lg font-bold text-terminal-green-light dark:text-terminal-green-dark uppercase tracking-wide m-0">⚡ SYSTEM STATUS</h2>
+                        <span class="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-none">REF: SYS-001</span>
                     </header>
                     
-                    <div class="system-info">
-                        <div class="system-item">
-                            <span class="system-label">Data Format</span>
-                            <span class="system-value">JSON</span>
+                    <div class="grid gap-3">
+                        <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-3 rounded-none">
+                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Data Format</span>
+                            <span class="text-xs text-terminal-green-light dark:text-terminal-green-dark font-bold">JSON</span>
                         </div>
-                        <div class="system-item">
-                            <span class="system-label">Sections Loaded</span>
-                            <span class="system-value">{{ resume.keys()|length }}</span>
+                        <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-3 rounded-none">
+                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Sections Loaded</span>
+                            <span class="text-xs text-terminal-green-light dark:text-terminal-green-dark font-bold">{{ resume.keys()|length }}</span>
                         </div>
-                        <div class="system-item">
-                            <span class="system-label">Template Engine</span>
-                            <span class="system-value">Jinja2</span>
+                        <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-3 rounded-none">
+                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Template Engine</span>
+                            <span class="text-xs text-terminal-green-light dark:text-terminal-green-dark font-bold">Jinja2</span>
                         </div>
-                        <div class="system-item">
-                            <span class="system-label">Backend</span>
-                            <span class="system-value">FastAPI</span>
+                        <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-3 rounded-none">
+                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider">Backend</span>
+                            <span class="text-xs text-terminal-green-light dark:text-terminal-green-dark font-bold">FastAPI</span>
                         </div>
                     </div>
                     
-                    <div id="state-data"></div>
+                    <div id="state-data" class="mt-4"></div>
                 </div>
             </div>
         </div>
@@ -318,16 +357,12 @@
         // Theme toggle functionality
         function toggleTheme() {
             const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
             
-            if (currentTheme === 'dark') {
-                html.setAttribute('data-theme', 'light');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
-            } else if (currentTheme === 'light') {
-                html.removeAttribute('data-theme');
-                localStorage.removeItem('theme');
             } else {
-                html.setAttribute('data-theme', 'dark');
+                html.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
             }
         }
@@ -335,8 +370,10 @@
         // Initialize theme from localStorage or system preference
         function initTheme() {
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                document.documentElement.setAttribute('data-theme', savedTheme);
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
             }
         }
         
@@ -352,6 +389,24 @@
                 });
             }
         });
+        
+        // Add print media styles
+        const printStyles = `
+            @media print {
+                .fixed { position: static !important; }
+                .backdrop-blur-md { backdrop-filter: none !important; }
+                .mt-16 { margin-top: 0 !important; }
+                .p-8 { padding: 0 !important; }
+                .mb-8 { page-break-inside: avoid; margin-bottom: 0.5rem !important; }
+                .hover\\:border-gray-400:hover { border-color: inherit !important; }
+                .hover\\:shadow-lg:hover { box-shadow: none !important; }
+                .transition-all { transition: none !important; }
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = printStyles;
+        document.head.appendChild(styleSheet);
     </script>
 </body>
 </html> 
