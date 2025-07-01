@@ -1,0 +1,11 @@
+# Achievements
+[achievements]
+items = [
+    "Led firmware development for TRL7 solar EV charger deployed in off-grid setting",
+    "Resolved critical production system failures and supported business continuity",
+    "Improved application performance and reliability",
+    "Built custom protocols and hardware-software integrations from scratch",
+    "Cum Laude recognition for engineering final year project",
+    "Runner-up in Stellenbosch University Fin-Tech Challenge (2019)",
+    "Deputy Head Student at Somerset College (2015)"
+] 

@@ -1,0 +1,59 @@
+# Skills and Technical Expertise
+[[skills]]
+category = "Backend Development"
+items = [
+    "**Python** (Expert) - FastAPI, Django, Flask, asyncio, multiprocessing",
+    "**Node.js** (Advanced) - Express, RESTful APIs, microservices",
+    "**Database Design** - PostgreSQL, MySQL, Redis, query optimization",
+    "**API Development** - REST, GraphQL, OpenAPI/Swagger documentation",
+    "**Testing** - pytest, unittest, integration testing, TDD practices"
+]
+
+[[skills]]
+category = "Embedded Systems & IoT"
+items = [
+    "**Firmware Development** - C/C++ for microcontrollers, real-time operating systems",
+    "**Power Electronics** - MPPT algorithms, high-voltage DC systems (1000V), EV charging protocols",
+    "**Communication Protocols** - ISO 15118, DIN 70121, CAN BUS, RS485, HomePlug GreenPHY",
+    "**Hardware Integration** - PCB-level troubleshooting, thermal management, safety systems",
+    "**Microcontrollers** - STM32, ESP32, Arduino, Raspberry Pi, NVIDIA Jetson",
+    "**Real-time Systems** - C/C++, interrupt handling, memory optimization",
+    "**Hardware Design** - Sensor interfacing, power management, PCB design"
+]
+
+[[skills]]
+category = "Frontend & Full-Stack"
+items = [
+    "**JavaScript/TypeScript** (Advanced) - ES6+, async/await, modern frameworks",
+    "**React/Next.js** (Advanced) - SSR/SSG, routing, state management",
+    "**Styling** - Tailwind CSS, CSS-in-JS, responsive design",
+    "**Authentication** - JWT, OAuth, session management, security best practices"
+]
+
+[[skills]]
+category = "DevOps & Infrastructure"
+items = [
+    "**Containerization** - Docker, Docker Compose, multi-stage builds",
+    "**Cloud Platforms** - AWS (Lambda, DynamoDB), Linux (Ubuntu) servers",
+    "**CI/CD** - GitHub Actions, automated testing, deployment pipelines",
+    "**Web Servers** - Nginx, SSL/TLS configuration, load balancing",
+    "**Monitoring** - Application logging, performance metrics, error tracking"
+]
+
+[[skills]]
+category = "Data & Analytics"
+items = [
+    "**Data Science** - NumPy, Pandas, SciPy, data processing pipelines",
+    "**Machine Learning** - PyTorch, Scikit-learn, model deployment",
+    "**Databases** - Complex queries, indexing, performance tuning",
+    "**Visualization** - Custom dashboards, real-time data display"
+]
+
+[[skills]]
+category = "Development Tools & Practices"
+items = [
+    "**Version Control** - Git, GitHub, branching strategies, code review",
+    "**Project Management** - Agile/Scrum, Jira, sprint planning",
+    "**Code Quality** - Linting, formatting, static analysis, code coverage",
+    "**Documentation** - Technical writing, API documentation, system architecture"
+] 
