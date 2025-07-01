@@ -25,7 +25,10 @@ def load_resume_data():
     for fname in os.listdir(sections_dir):
         if fname.endswith('.json'):
             with open(os.path.join(sections_dir, fname), 'r') as f:
-                data[fname.replace('.json', '')] = json.load(f)
+                file_data = json.load(f)
+                # Merge the data from each file directly into the main data dict
+                # This avoids double-nesting (e.g., resume.achievements.achievements)
+                data.update(file_data)
     return data
 
 @app.get('/', response_class=HTMLResponse)
